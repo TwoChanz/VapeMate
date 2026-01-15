@@ -71,6 +71,27 @@ types/           # TypeScript definitions
 - `preferences/{userId}` - Liked/disliked products, flavor profiles
 - `swipes/{swipeId}` - Swipe action history for recommendations
 
+### Navigation Flow
+```
+┌─────────────┐     ┌──────────────────┐     ┌────────────┐
+│   Welcome   │ ──► │ Age Verification │ ──► │    Auth    │
+│   Screen    │     │   (21+ check)    │     │  (SignUp/  │
+└─────────────┘     └──────────────────┘     │   SignIn)  │
+                                             └─────┬──────┘
+                                                   │
+                                                   ▼
+                    ┌──────────────────────────────────────────┐
+                    │           Main Tab Navigator             │
+                    ├──────────┬───────────┬──────────┬────────┤
+                    │ Discover │ Favorites │Community │Profile │
+                    │ (Swipe)  │  (Saved)  │ (Forums) │(Acct)  │
+                    └──────────┴───────────┴──────────┴────────┘
+```
+
+- **Onboarding Stack**: Welcome → Age Verification → Auth (Native Stack)
+- **Main App**: Bottom Tab Navigator with 4 tabs
+- **Auth Guard**: Users must pass age verification before accessing main app
+
 ## Current State
 
 The project is in MVP phase with scaffolding complete but core features pending implementation:
