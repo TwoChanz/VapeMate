@@ -25,6 +25,9 @@ npm run web      # Web browser
 # Clear cache and restart
 expo start -c
 
+# Run on physical device
+# Install Expo Go app, then scan QR code from npm start
+
 # Production builds (requires EAS CLI)
 eas build --platform ios
 eas build --platform android
@@ -75,6 +78,17 @@ The project is in MVP phase with scaffolding complete but core features pending 
 - Authentication screens exist but Firebase integration needed
 - Swipe interface uses mock data (needs Firestore integration)
 - AI recommendations not yet wired up
+
+### Known Issues
+- Age verification uses client-side validation only (needs server-side verification)
+- Mock data used for products (needs Firestore integration)
+- Authentication doesn't persist (needs AsyncStorage implementation)
+- Some npm package vulnerabilities from react-native-deck-swiper dependencies
+
+### Roadmap Documents
+- `RECOMMENDATIONS.md` - 60+ feature ideas across 10 categories
+- `TOP_10_PRIORITIES.md` - Prioritized features to implement first
+- `PROJECT_STATUS.md` - Current progress tracking
 
 ## Compliance Requirements
 
