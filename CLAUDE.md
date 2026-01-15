@@ -37,7 +37,9 @@ eas build --platform android
 
 Copy `.env.example` to `.env` and configure:
 - Firebase credentials (API key, auth domain, project ID, storage bucket, messaging sender ID, app ID)
+- Supabase credentials (URL, anon key)
 - OpenAI API key
+- AgeChecker.net API key (for age verification)
 
 Configuration is loaded through `app.config.js` via `process.env`.
 
@@ -46,10 +48,23 @@ Configuration is loaded through `app.config.js` via `process.env`.
 ### Tech Stack
 - **Framework**: React Native with Expo SDK 54
 - **Navigation**: React Navigation (Native Stack + Bottom Tabs)
-- **Backend**: Firebase (Auth, Firestore, Cloud Messaging)
+- **Backend**: Firebase (Auth, Storage, Cloud Messaging) + Supabase (Database)
 - **AI**: OpenAI GPT-4o-mini for recommendations
 - **Gestures**: react-native-gesture-handler and react-native-reanimated
 - **Swipe UI**: react-native-deck-swiper
+
+### API Stack
+| Service | Provider | Purpose |
+|---------|----------|---------|
+| Authentication | Firebase Auth | Email/password + social login |
+| Age Verification | AgeChecker.net | 21+ ID verification (compliance) |
+| Database | Supabase | PostgreSQL for users, products, preferences |
+| AI Recommendations | OpenAI GPT-4o-mini | Personalized product suggestions |
+| Push Notifications | Firebase Cloud Messaging | Product alerts, recommendations |
+| Geo-location | expo-location + ipapi.co | Geo-blocking for prohibited regions |
+| File Storage | Firebase Storage | Product images, user avatars |
+| Analytics | Firebase Analytics | Usage tracking, funnels |
+| Payments | RevenueCat | In-app purchases, premium tier |
 
 ### Entry Points
 - `index.ts` - Registers the root component with Expo
@@ -60,16 +75,18 @@ Configuration is loaded through `app.config.js` via `process.env`.
 screens/         # WelcomeScreen, AgeVerificationScreen, AuthScreen,
                  # DiscoverScreen, FavoritesScreen, CommunityScreen, ProfileScreen
 navigation/      # AppNavigator.tsx (tab + stack configuration)
-config/          # firebase.ts, openai.ts
-services/        # API and service functions
+config/          # firebase.ts, supabase.ts, openai.ts
+services/        # API and service functions (auth, products, recommendations, age-verify)
 types/           # TypeScript definitions
 ```
 
-### Firestore Data Model
-- `users/{userId}` - User profile with DOB, verification status
-- `products/{productId}` - Product catalog (name, brand, flavors, nicotine strength, puff count)
-- `preferences/{userId}` - Liked/disliked products, flavor profiles
-- `swipes/{swipeId}` - Swipe action history for recommendations
+### Supabase Data Model (PostgreSQL)
+```
+users           - id, email, display_name, dob, is_verified, created_at
+products        - id, name, brand, flavors[], nicotine_strength, puff_count, image_url, tags[]
+preferences     - id, user_id (FK), liked_products[], disliked_products[], flavor_profiles[]
+swipes          - id, user_id (FK), product_id (FK), action (like/dislike/superlike), timestamp
+```
 
 ### Navigation Flow
 ```
